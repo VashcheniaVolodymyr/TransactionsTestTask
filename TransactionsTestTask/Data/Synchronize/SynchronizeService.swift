@@ -7,11 +7,13 @@
 
 import Foundation
 import Combine
+import CoreData
 
 final class SynchonizeService: Injectable {
     private let synchronizeQueue: DispatchQueue
 
-    private lazy var allModels: [Any] = [
+    private lazy var allModels: [NSManagedObject.Type] = [
+        ExchangeRateCD.self
     ]
 
     // MARK: Initialization
@@ -23,7 +25,6 @@ final class SynchonizeService: Injectable {
     @Injected private var dataManager: DataManager
 
     // MARK: Public methods
-    
     func synchronize<MODEL>(_ model: MODEL) {
         typealias DTO = DTOConvertible
         typealias DOMAIN = DOMAINConvertible
@@ -37,6 +38,18 @@ final class SynchonizeService: Injectable {
                 let dto = dtoConvertible.dto()
                 
                 switch dto {
+                case let coreDataConvertible as (any CORE_DATA):
+                    let coreDataModel = coreDataConvertible.coreData()
+                
+                    coreDataModel.saveUnique(context: CoreDataStack.viewContext)
+                    
+                    if let domainConvertible = coreDataModel as? (any DOMAIN) {
+                        let domain = domainConvertible.domain()
+                        
+                        if let synchronizable = domain as? (any Synchronizable) {
+                            self.synchronize(data: synchronizable)
+                        }
+                    }
                 case let domainConvertible as (any DOMAIN):
                     let domain = domainConvertible.domain()
                     
@@ -46,11 +59,25 @@ final class SynchonizeService: Injectable {
                 default:
                     break
                 }
+            case let domainConvertible as [(any DOMAIN)]:
+                let domain = domainConvertible.map { $0.domain() }
+                
+                if let synchronizable = domain as? (any Synchronizable) {
+                    self.synchronize(data: synchronizable)
+                }
             case let domainConvertible as (any DOMAIN):
                 let domain = domainConvertible.domain()
                 
                 if let synchronizable = domain as? (any Synchronizable) {
                     self.synchronize(data: synchronizable)
+                }
+            case let coreDataConvertible as (any CORE_DATA):
+                if let domainConvertible = coreDataConvertible as? (any DOMAIN) {
+                    let domain = domainConvertible.domain()
+                    
+                    if let synchronizable = domain as? (any Synchronizable) {
+                        self.synchronize(data: synchronizable)
+                    }
                 }
             default:
                 if let synchronizable = model as? (any Synchronizable) {
@@ -60,14 +87,38 @@ final class SynchonizeService: Injectable {
         }
     }
     
-    private func synchronize<SYNC: Synchronizable>(data: SYNC) where SYNC: Synchronizable {
-        guard let synchronize = data as? SYNC.Synchronize else {
-            return
+    func syncStoredData() {
+        allModels.forEach { type in
+            let featch = fetchAll(type, context: CoreDataStack.viewContext)
+            
+            if let first = featch.first as? UniqueEntity {
+                self.synchronize(first)
+            } else {
+                self.synchronize(featch)
+            }
         }
-        dataManager[keyPath: data.syncKeyPath].send(synchronize)
     }
     
-    func syncStoredData() {}
+    func fetchAll<T: NSManagedObject>(
+        _ type: T.Type,
+        context: NSManagedObjectContext = CoreDataStack.viewContext
+    ) -> [T] {
+        let request = NSFetchRequest<T>(entityName: String(describing: type))
+       
+        do {
+            return try context.fetch(request)
+        } catch {
+            return []
+        }
+    }
     
     func removeStoredData() {}
+    
+    // MARK: Private methods
+    private func synchronize<SYNC: Synchronizable>(data: SYNC) where SYNC: Synchronizable {
+        guard let synchronized = data as? SYNC.Synchronize else {
+            return
+        }
+        dataManager[keyPath: data.syncKeyPath].send(synchronized)
+    }
 }

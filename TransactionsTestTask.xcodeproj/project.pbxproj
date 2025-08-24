@@ -59,6 +59,14 @@
 		25E84E1E2E59EDDB00794DF7 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E1D2E59EDD300794DF7 /* Currency.swift */; };
 		25E84E212E59F03400794DF7 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E202E59F02A00794DF7 /* Data+Extensions.swift */; };
 		25E84E242E59FA9800794DF7 /* ExchangeRateApiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E232E59FA8C00794DF7 /* ExchangeRateApiUseCase.swift */; };
+		25E84E2C2E5B174B00794DF7 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E2B2E5B174700794DF7 /* Transaction.swift */; };
+		25E84E382E5B1DB700794DF7 /* TransactionCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E362E5B1DB700794DF7 /* TransactionCD+CoreDataClass.swift */; };
+		25E84E392E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E372E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift */; };
+		25E84E412E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E3F2E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift */; };
+		25E84E422E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E3E2E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift */; };
+		25E84E442E5B441500794DF7 /* NSManageObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */; };
+		25E84E472E5B637F00794DF7 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E462E5B637A00794DF7 /* AppError.swift */; };
+		25E84E492E5BD4FE00794DF7 /* UniqueEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E482E5BD4F400794DF7 /* UniqueEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +143,14 @@
 		25E84E1D2E59EDD300794DF7 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		25E84E202E59F02A00794DF7 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		25E84E232E59FA8C00794DF7 /* ExchangeRateApiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateApiUseCase.swift; sourceTree = "<group>"; };
+		25E84E2B2E5B174700794DF7 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		25E84E362E5B1DB700794DF7 /* TransactionCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionCD+CoreDataClass.swift"; sourceTree = "<group>"; };
+		25E84E372E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionCD+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		25E84E3E2E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExchangeRateCD+CoreDataClass.swift"; sourceTree = "<group>"; };
+		25E84E3F2E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExchangeRateCD+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManageObject+Extensions.swift"; sourceTree = "<group>"; };
+		25E84E462E5B637A00794DF7 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		25E84E482E5BD4F400794DF7 /* UniqueEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +283,7 @@
 		25E84DA82E59AAE600794DF7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E452E5B637300794DF7 /* Error */,
 				25E84E162E59E5D800794DF7 /* ApiRequests */,
 				25E84E022E59BDEE00794DF7 /* Synchronize */,
 				25E84DFF2E59BCE500794DF7 /* Cache */,
@@ -300,6 +317,7 @@
 		25E84DAB2E59AB3200794DF7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */,
 				25E84E202E59F02A00794DF7 /* Data+Extensions.swift */,
 				25E84DB92E59ACFD00794DF7 /* Bool+Extensions.swift */,
 				25E84E142E59D66600794DF7 /* Optional+Extensions.swift */,
@@ -340,6 +358,7 @@
 		25E84DAF2E59ABCE00794DF7 /* CoreDataModels */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E482E5BD4F400794DF7 /* UniqueEntity.swift */,
 				25E84DDF2E59B02000794DF7 /* CoreDataConvertible.swift */,
 				25E84DE62E59B11E00794DF7 /* Models */,
 			);
@@ -365,7 +384,6 @@
 		25E84DB22E59AC3400794DF7 /* DOMAINs */ = {
 			isa = PBXGroup;
 			children = (
-				25E84E1D2E59EDD300794DF7 /* Currency.swift */,
 				25E84DE32E59B0B400794DF7 /* DomainConvertible.swift */,
 				25E84DE72E59B13900794DF7 /* Models */,
 			);
@@ -446,6 +464,8 @@
 		25E84DE62E59B11E00794DF7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E402E5B303D00794DF7 /* ExchangeRate */,
+				25E84E352E5B1C5C00794DF7 /* Transaction */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -453,7 +473,9 @@
 		25E84DE72E59B13900794DF7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E1D2E59EDD300794DF7 /* Currency.swift */,
 				25E84E1B2E59E9D100794DF7 /* ExchangeRate.swift */,
+				25E84E2B2E5B174700794DF7 /* Transaction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -566,6 +588,32 @@
 				25E84E232E59FA8C00794DF7 /* ExchangeRateApiUseCase.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		25E84E352E5B1C5C00794DF7 /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				25E84E362E5B1DB700794DF7 /* TransactionCD+CoreDataClass.swift */,
+				25E84E372E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift */,
+			);
+			path = Transaction;
+			sourceTree = "<group>";
+		};
+		25E84E402E5B303D00794DF7 /* ExchangeRate */ = {
+			isa = PBXGroup;
+			children = (
+				25E84E3E2E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift */,
+				25E84E3F2E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift */,
+			);
+			path = ExchangeRate;
+			sourceTree = "<group>";
+		};
+		25E84E452E5B637300794DF7 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				25E84E462E5B637A00794DF7 /* AppError.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -716,12 +764,14 @@
 				25E84E0E2E59CAE400794DF7 /* NetworkRequest.swift in Sources */,
 				25E84DF72E59B2EE00794DF7 /* MainScene.swift in Sources */,
 				25E84E132E59D63100794DF7 /* Publisher+SinkAsync.swift in Sources */,
+				25E84E492E5BD4FE00794DF7 /* UniqueEntity.swift in Sources */,
 				25E84DE22E59B04B00794DF7 /* DTOConvertible.swift in Sources */,
 				25E84DCE2E59AE5B00794DF7 /* HTTPURLResponse+Extension.swift in Sources */,
 				25E84E1E2E59EDDB00794DF7 /* Currency.swift in Sources */,
 				25E84DD02E59AE7600794DF7 /* Error+Extension.swift in Sources */,
 				25E84E212E59F03400794DF7 /* Data+Extensions.swift in Sources */,
 				25E84DCC2E59AE2900794DF7 /* URLRequest+Extensions.swift in Sources */,
+				25E84E2C2E5B174B00794DF7 /* Transaction.swift in Sources */,
 				25E84DF42E59B29500794DF7 /* SceneTransitionMethod.swift in Sources */,
 				1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */,
 				25E84DCA2E59ADFC00794DF7 /* NetworkService.swift in Sources */,
@@ -736,15 +786,21 @@
 				25E84DDE2E59AFFE00794DF7 /* Completions+Typealias.swift in Sources */,
 				25E84E182E59E60000794DF7 /* ExchangeRateApiRequest.swift in Sources */,
 				25E84DD22E59AE8E00794DF7 /* APIClientErrorRepresentable.swift in Sources */,
+				25E84E412E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift in Sources */,
+				25E84E422E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift in Sources */,
 				25E84E062E59BE5A00794DF7 /* SynchronizeService.swift in Sources */,
 				25E84DC22E59AD8A00794DF7 /* APIRequest.swift in Sources */,
+				25E84E442E5B441500794DF7 /* NSManageObject+Extensions.swift in Sources */,
 				25E84DE02E59B02500794DF7 /* CoreDataConvertible.swift in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
 				25E84DEF2E59B24300794DF7 /* Navigation.swift in Sources */,
 				25E84E1A2E59E86F00794DF7 /* ExchangeRateDTO.swift in Sources */,
 				25E84DD42E59AEB800794DF7 /* APIError.swift in Sources */,
 				25E84DFB2E59B30B00794DF7 /* MainSceneBuilder.swift in Sources */,
+				25E84E382E5B1DB700794DF7 /* TransactionCD+CoreDataClass.swift in Sources */,
+				25E84E392E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift in Sources */,
 				25E84E242E59FA9800794DF7 /* ExchangeRateApiUseCase.swift in Sources */,
+				25E84E472E5B637F00794DF7 /* AppError.swift in Sources */,
 				25E84E112E59CD4300794DF7 /* NetworkRequestManager.swift in Sources */,
 				25E84DEC2E59B1D300794DF7 /* BaseViewController.swift in Sources */,
 			);
