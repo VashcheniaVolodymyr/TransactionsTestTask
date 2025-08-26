@@ -13,7 +13,8 @@ import Combine
 /// The service should be covered by unit tests
 
 final class BitcoinRateService: Injectable {
-    var onRateUpdate: CurrentValueSubject<Double, Never> = .init(0)
+    var rate: CurrentValueSubject<Double, Never> = .init(0)
+    
     private var cancelBag: Set<AnyCancellable> = []
     
     @Injected private var dataManager: DataManager
@@ -24,7 +25,7 @@ final class BitcoinRateService: Injectable {
     
     init() {
         bincoinRatePublisher
-            .assign(to: \.value, on: onRateUpdate, ownership: .weak)
+            .assign(to: \.value, on: rate, ownership: .weak)
             .store(in: &cancelBag)
     }
     

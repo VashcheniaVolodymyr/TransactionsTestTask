@@ -9,8 +9,7 @@ import Combine
 
 final class DataManager: Injectable {
     var exchangeRate: CurrentValueSubject<ExchangeRate?, Never> = .init(nil)
+    var balance: CurrentValueSubject<Balance, Never> = .init(.init(value: 0))
     
-    init() {
-        
-    }
+    init() {}
 }

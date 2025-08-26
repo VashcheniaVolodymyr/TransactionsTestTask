@@ -7,6 +7,4 @@
 
 import UIKit
 
-class BaseViewController: UIViewController, AnyObject {
-   
-}
+class BaseViewController: UIViewController, AnyObject { }

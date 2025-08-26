@@ -13,7 +13,9 @@ final class SynchonizeService: Injectable {
     private let synchronizeQueue: DispatchQueue
 
     private lazy var allModels: [NSManagedObject.Type] = [
-        ExchangeRateCD.self
+        ExchangeRateCD.self,
+        BalanceCD.self,
+        TransactionCD.self
     ]
 
     // MARK: Initialization
@@ -41,13 +43,25 @@ final class SynchonizeService: Injectable {
                 case let coreDataConvertible as (any CORE_DATA):
                     let coreDataModel = coreDataConvertible.coreData()
                 
-                    coreDataModel.saveUnique(context: CoreDataStack.viewContext)
-                    
-                    if let domainConvertible = coreDataModel as? (any DOMAIN) {
-                        let domain = domainConvertible.domain()
+                    if (coreDataModel as? UniqueEntity).notNil {
+                        coreDataModel.saveUnique(context: CoreDataStack.viewContext)
                         
-                        if let synchronizable = domain as? (any Synchronizable) {
-                            self.synchronize(data: synchronizable)
+                        if let domainConvertible = coreDataModel as? (any DOMAIN) {
+                            let domain = domainConvertible.domain()
+                            
+                            if let synchronizable = domain as? (any Synchronizable) {
+                                self.synchronize(data: synchronizable)
+                            }
+                        }
+                    } else {
+                        coreDataModel.save(context: CoreDataStack.viewContext)
+                        
+                        if let domainConvertible = coreDataModel as? (any DOMAIN) {
+                            let domain = domainConvertible.domain()
+                            
+                            if let synchronizable = domain as? (any Synchronizable) {
+                                self.synchronize(data: synchronizable)
+                            }
                         }
                     }
                 case let domainConvertible as (any DOMAIN):
@@ -59,12 +73,6 @@ final class SynchonizeService: Injectable {
                 default:
                     break
                 }
-            case let domainConvertible as [(any DOMAIN)]:
-                let domain = domainConvertible.map { $0.domain() }
-                
-                if let synchronizable = domain as? (any Synchronizable) {
-                    self.synchronize(data: synchronizable)
-                }
             case let domainConvertible as (any DOMAIN):
                 let domain = domainConvertible.domain()
                 
@@ -72,11 +80,27 @@ final class SynchonizeService: Injectable {
                     self.synchronize(data: synchronizable)
                 }
             case let coreDataConvertible as (any CORE_DATA):
-                if let domainConvertible = coreDataConvertible as? (any DOMAIN) {
-                    let domain = domainConvertible.domain()
+                let coreDataModel = coreDataConvertible.coreData()
+            
+                if (coreDataModel as? UniqueEntity).notNil {
+                    coreDataModel.saveUnique(context: CoreDataStack.viewContext)
                     
-                    if let synchronizable = domain as? (any Synchronizable) {
-                        self.synchronize(data: synchronizable)
+                    if let domainConvertible = coreDataModel as? (any DOMAIN) {
+                        let domain = domainConvertible.domain()
+                        
+                        if let synchronizable = domain as? (any Synchronizable) {
+                            self.synchronize(data: synchronizable)
+                        }
+                    }
+                } else {
+                    coreDataModel.save(context: CoreDataStack.viewContext)
+                    
+                    if let domainConvertible = coreDataModel as? (any DOMAIN) {
+                        let domain = domainConvertible.domain()
+                        
+                        if let synchronizable = domain as? (any Synchronizable) {
+                            self.synchronize(data: synchronizable)
+                        }
                     }
                 }
             default:
@@ -94,7 +118,7 @@ final class SynchonizeService: Injectable {
             if let first = featch.first as? UniqueEntity {
                 self.synchronize(first)
             } else {
-                self.synchronize(featch)
+                self.synchronize(featch) // TODO: Implement sync collections in the future
             }
         }
     }
@@ -115,7 +139,7 @@ final class SynchonizeService: Injectable {
     func removeStoredData() {}
     
     // MARK: Private methods
-    private func synchronize<SYNC: Synchronizable>(data: SYNC) where SYNC: Synchronizable {
+    private func synchronize<SYNC: Synchronizable>(data: SYNC) {
         guard let synchronized = data as? SYNC.Synchronize else {
             return
         }

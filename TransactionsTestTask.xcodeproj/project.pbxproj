@@ -67,6 +67,14 @@
 		25E84E442E5B441500794DF7 /* NSManageObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */; };
 		25E84E472E5B637F00794DF7 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E462E5B637A00794DF7 /* AppError.swift */; };
 		25E84E492E5BD4FE00794DF7 /* UniqueEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E482E5BD4F400794DF7 /* UniqueEntity.swift */; };
+		25E84E4C2E5C361F00794DF7 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E4B2E5C361B00794DF7 /* Balance.swift */; };
+		25E84E532E5C37E900794DF7 /* BalanceCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E522E5C37E900794DF7 /* BalanceCD+CoreDataProperties.swift */; };
+		25E84E542E5C37E900794DF7 /* BalanceCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E512E5C37E900794DF7 /* BalanceCD+CoreDataClass.swift */; };
+		25E84E572E5C390F00794DF7 /* TransactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E562E5C390A00794DF7 /* TransactionService.swift */; };
+		25E84E592E5C945700794DF7 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E582E5C945200794DF7 /* HistoryService.swift */; };
+		25E84E5C2E5CD5E100794DF7 /* TransactionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E5B2E5CD5DA00794DF7 /* TransactionSection.swift */; };
+		25E84E5E2E5CD6BA00794DF7 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E5D2E5CD6B600794DF7 /* TransactionCell.swift */; };
+		25E84E602E5D1CEC00794DF7 /* UITableView+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E5F2E5D1CE200794DF7 /* UITableView+Combine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +159,14 @@
 		25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManageObject+Extensions.swift"; sourceTree = "<group>"; };
 		25E84E462E5B637A00794DF7 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		25E84E482E5BD4F400794DF7 /* UniqueEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueEntity.swift; sourceTree = "<group>"; };
+		25E84E4B2E5C361B00794DF7 /* Balance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
+		25E84E512E5C37E900794DF7 /* BalanceCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BalanceCD+CoreDataClass.swift"; sourceTree = "<group>"; };
+		25E84E522E5C37E900794DF7 /* BalanceCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BalanceCD+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		25E84E562E5C390A00794DF7 /* TransactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionService.swift; sourceTree = "<group>"; };
+		25E84E582E5C945200794DF7 /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
+		25E84E5B2E5CD5DA00794DF7 /* TransactionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSection.swift; sourceTree = "<group>"; };
+		25E84E5D2E5CD6B600794DF7 /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
+		25E84E5F2E5D1CE200794DF7 /* UITableView+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Combine.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,7 +305,6 @@
 				25E84DFF2E59BCE500794DF7 /* Cache */,
 				25E84DAF2E59ABCE00794DF7 /* CoreDataModels */,
 				25E84DB02E59ABDF00794DF7 /* DTOs */,
-				25E84DB12E59AC0C00794DF7 /* ModelConvertible */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -317,6 +332,7 @@
 		25E84DAB2E59AB3200794DF7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E5F2E5D1CE200794DF7 /* UITableView+Combine.swift */,
 				25E84E432E5B440A00794DF7 /* NSManageObject+Extensions.swift */,
 				25E84E202E59F02A00794DF7 /* Data+Extensions.swift */,
 				25E84DB92E59ACFD00794DF7 /* Bool+Extensions.swift */,
@@ -374,13 +390,6 @@
 			path = DTOs;
 			sourceTree = "<group>";
 		};
-		25E84DB12E59AC0C00794DF7 /* ModelConvertible */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ModelConvertible;
-			sourceTree = "<group>";
-		};
 		25E84DB22E59AC3400794DF7 /* DOMAINs */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +402,7 @@
 		25E84DB42E59AC4C00794DF7 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E5D2E5CD6B600794DF7 /* TransactionCell.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -464,6 +474,7 @@
 		25E84DE62E59B11E00794DF7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E4A2E5C360B00794DF7 /* Balance */,
 				25E84E402E5B303D00794DF7 /* ExchangeRate */,
 				25E84E352E5B1C5C00794DF7 /* Transaction */,
 			);
@@ -473,9 +484,10 @@
 		25E84DE72E59B13900794DF7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E4B2E5C361B00794DF7 /* Balance.swift */,
 				25E84E1D2E59EDD300794DF7 /* Currency.swift */,
 				25E84E1B2E59E9D100794DF7 /* ExchangeRate.swift */,
-				25E84E2B2E5B174700794DF7 /* Transaction.swift */,
+				25E84E5A2E5CD5CF00794DF7 /* Transaction */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -519,6 +531,8 @@
 		25E84DFC2E59B60200794DF7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				25E84E582E5C945200794DF7 /* HistoryService.swift */,
+				25E84E562E5C390A00794DF7 /* TransactionService.swift */,
 				0DF1D13F2D22DC4B001626E7 /* ServicesAssembler.swift */,
 				0DF1D1442D22DCFF001626E7 /* BitcoinRateService.swift */,
 			);
@@ -614,6 +628,24 @@
 				25E84E462E5B637A00794DF7 /* AppError.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		25E84E4A2E5C360B00794DF7 /* Balance */ = {
+			isa = PBXGroup;
+			children = (
+				25E84E512E5C37E900794DF7 /* BalanceCD+CoreDataClass.swift */,
+				25E84E522E5C37E900794DF7 /* BalanceCD+CoreDataProperties.swift */,
+			);
+			path = Balance;
+			sourceTree = "<group>";
+		};
+		25E84E5A2E5CD5CF00794DF7 /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				25E84E5B2E5CD5DA00794DF7 /* TransactionSection.swift */,
+				25E84E2B2E5B174700794DF7 /* Transaction.swift */,
+			);
+			path = Transaction;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -749,6 +781,7 @@
 			files = (
 				0D1540612D22EF5D00D6D63F /* AnalyticsEvent.swift in Sources */,
 				25E84DBA2E59AD0400794DF7 /* Bool+Extensions.swift in Sources */,
+				25E84E592E5C945700794DF7 /* HistoryService.swift in Sources */,
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				25E84DD72E59AEE800794DF7 /* AppConstants.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
@@ -760,11 +793,15 @@
 				25E84E0B2E59CA7B00794DF7 /* Response.swift in Sources */,
 				25E84DC82E59ADD000794DF7 /* URLRequestConvertible.swift in Sources */,
 				25E84DC62E59ADBB00794DF7 /* URLConvertible.swift in Sources */,
+				25E84E5E2E5CD6BA00794DF7 /* TransactionCell.swift in Sources */,
 				1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */,
 				25E84E0E2E59CAE400794DF7 /* NetworkRequest.swift in Sources */,
 				25E84DF72E59B2EE00794DF7 /* MainScene.swift in Sources */,
 				25E84E132E59D63100794DF7 /* Publisher+SinkAsync.swift in Sources */,
 				25E84E492E5BD4FE00794DF7 /* UniqueEntity.swift in Sources */,
+				25E84E572E5C390F00794DF7 /* TransactionService.swift in Sources */,
+				25E84E532E5C37E900794DF7 /* BalanceCD+CoreDataProperties.swift in Sources */,
+				25E84E542E5C37E900794DF7 /* BalanceCD+CoreDataClass.swift in Sources */,
 				25E84DE22E59B04B00794DF7 /* DTOConvertible.swift in Sources */,
 				25E84DCE2E59AE5B00794DF7 /* HTTPURLResponse+Extension.swift in Sources */,
 				25E84E1E2E59EDDB00794DF7 /* Currency.swift in Sources */,
@@ -785,11 +822,13 @@
 				25E84E042E59BE0000794DF7 /* Synchronizable.swift in Sources */,
 				25E84DDE2E59AFFE00794DF7 /* Completions+Typealias.swift in Sources */,
 				25E84E182E59E60000794DF7 /* ExchangeRateApiRequest.swift in Sources */,
+				25E84E5C2E5CD5E100794DF7 /* TransactionSection.swift in Sources */,
 				25E84DD22E59AE8E00794DF7 /* APIClientErrorRepresentable.swift in Sources */,
 				25E84E412E5B303D00794DF7 /* ExchangeRateCD+CoreDataProperties.swift in Sources */,
 				25E84E422E5B303D00794DF7 /* ExchangeRateCD+CoreDataClass.swift in Sources */,
 				25E84E062E59BE5A00794DF7 /* SynchronizeService.swift in Sources */,
 				25E84DC22E59AD8A00794DF7 /* APIRequest.swift in Sources */,
+				25E84E4C2E5C361F00794DF7 /* Balance.swift in Sources */,
 				25E84E442E5B441500794DF7 /* NSManageObject+Extensions.swift in Sources */,
 				25E84DE02E59B02500794DF7 /* CoreDataConvertible.swift in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
@@ -801,6 +840,7 @@
 				25E84E392E5B1DB700794DF7 /* TransactionCD+CoreDataProperties.swift in Sources */,
 				25E84E242E59FA9800794DF7 /* ExchangeRateApiUseCase.swift in Sources */,
 				25E84E472E5B637F00794DF7 /* AppError.swift in Sources */,
+				25E84E602E5D1CEC00794DF7 /* UITableView+Combine.swift in Sources */,
 				25E84E112E59CD4300794DF7 /* NetworkRequestManager.swift in Sources */,
 				25E84DEC2E59B1D300794DF7 /* BaseViewController.swift in Sources */,
 			);

@@ -6,20 +6,40 @@
 //
 
 import Foundation
+import Combine
+import UIKit
 
-struct Transaction: Hashable {
+struct Transaction: Hashable, CoreDataConvertible {
     let uuid: UUID
     let amount: Double
-    let category: Category
+    let category: Category?
     let createdAt: Date
     let type: TransactionType
+    
+    init(amount: Double, category: Category?, createdAt: Date, type: TransactionType) {
+        self.uuid = UUID()
+        self.amount = amount
+        self.category = category
+        self.createdAt = createdAt
+        self.type = type
+    }
     
     init(transactionCD: TransactionCD) {
         self.uuid = transactionCD.uuid
         self.amount = transactionCD.amount
-        self.category = .init(rawValue: transactionCD.category)
+        
+        if let category = transactionCD.category {
+            self.category = .init(rawValue: category)
+        } else {
+            self.category = nil
+        }
+        
         self.createdAt = transactionCD.createdAt
         self.type = .init(rawValue: transactionCD.type)
+    }
+    
+    func coreData() -> TransactionCD {
+        return TransactionCD(transaction: self)
     }
 }
 
@@ -41,6 +61,21 @@ extension Transaction {
                 self = .restaurant
             default:
                 self = .other
+            }
+        }
+
+        var icon: UIImage {
+            switch self {
+            case .groceries:
+                return UIImage(systemName: "square.stack.3d.up") ?? UIImage.init()
+            case .taxi:
+                return UIImage(systemName: "car.fill") ?? UIImage.init()
+            case .electronics:
+                return UIImage(systemName: "laptopcomputer.and.iphone") ?? UIImage.init()
+            case .restaurant:
+                return UIImage(systemName: "fork.knife") ?? UIImage.init()
+            case .other:
+                return UIImage(systemName: "line.3.horizontal.circle") ?? UIImage.init()
             }
         }
     }

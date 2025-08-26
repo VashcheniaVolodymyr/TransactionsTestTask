@@ -12,10 +12,10 @@ import CoreData
 
 public class TransactionCD: NSManagedObject {
     convenience init(transaction: Transaction) {
-        self.init()
+        self.init(context: CoreDataStack.viewContext)
         self.uuid = transaction.uuid
         self.amount = transaction.amount
-        self.category = transaction.category.rawValue
+        self.category = transaction.category?.rawValue
         self.createdAt = transaction.createdAt
         self.type = transaction.type.rawValue
     }
