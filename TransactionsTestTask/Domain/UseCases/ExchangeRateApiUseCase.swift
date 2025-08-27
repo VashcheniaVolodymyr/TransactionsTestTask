@@ -14,12 +14,15 @@ protocol ExchangeRateApiUseCase {
 }
 
 final class ExchangeRateApiUseCaseImpl: ExchangeRateApiUseCase {
-    let networkRequestService: NetworkRequestServiceProtocol
+    // MARK: Private
+    private let networkRequestService: NetworkRequestServiceProtocol
     
+    // MARK: Init
     init(networkRequestService: NetworkRequestServiceProtocol = NetworkRequestService()) {
         self.networkRequestService = networkRequestService
     }
     
+    // MARK: Protocol
     func fetchExchangeRate(ids: Currency, vs: Currency, receiveOn: DispatchQueue = .main) -> AnyPublisher<ExchangeRate, APIError> {
         let request = ExchangeRateApiRequest.rate(ids: ids, vs: vs)
         let networkRequest = NetworkRequest(request: request, dto: ExchangeRateDTO.self)
@@ -33,6 +36,6 @@ final class ExchangeRateApiUseCaseImpl: ExchangeRateApiUseCase {
         let request = ExchangeRateApiRequest.rate(ids: ids, vs: vs)
         let networkRequest = NetworkRequest(request: request, dto: ExchangeRateDTO.self)
         
-        networkRequestService.synchronize(request: networkRequest)
+        self.networkRequestService.synchronize(request: networkRequest)
     }
 }

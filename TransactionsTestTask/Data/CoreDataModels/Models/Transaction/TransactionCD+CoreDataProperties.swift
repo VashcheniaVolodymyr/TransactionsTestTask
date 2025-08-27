@@ -22,6 +22,4 @@ extension TransactionCD {
 
 }
 
-extension TransactionCD: Identifiable {
-
-}
+extension TransactionCD: Identifiable { }

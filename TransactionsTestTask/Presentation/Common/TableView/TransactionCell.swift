@@ -8,9 +8,10 @@
 import UIKit
 
 class TransactionCell: UITableViewCell {
+    // MARK: Private
     private var iconBgBottomConstraint: NSLayoutConstraint?
     
-    // MARK: - UI Components
+    // MARK: - UI
     private let transactionIconImage: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(systemName: "fork.knife")
@@ -60,7 +61,7 @@ class TransactionCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - LifeCycle
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
@@ -70,12 +71,13 @@ class TransactionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Lifecycle
     override func prepareForReuse() {
         super.prepareForReuse()
         resetCellAppearance()
     }
     
-    // MARK: - UI Set Up
+    // MARK: - Private methods
     private func setupView() {
         contentView.backgroundColor = .clear
         
@@ -115,25 +117,30 @@ class TransactionCell: UITableViewCell {
         iconBgBottomConstraint?.constant = 0
     }
     
-    func setupLastCell() {
-        self.layer.cornerRadius = 15
-        self.clipsToBounds = true
-        self.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        iconBgBottomConstraint?.constant = -12
-    }
-    
+    // MARK: Public
     func configure(with transaction: Transaction) {
         switch transaction.type {
         case .deposit:
             self.categoryLabel.text = "Deposit"
-            self.transactionIconImage.image = UIImage(systemName: "plus.app.fill")
+            self.transactionIconImage.image = UIImage(systemName: "plus")
+            self.transactionIconImage.tintColor = .white
+            self.transactionIconBg.backgroundColor = UIColor(resource: .brand)
+            self.transactionIconBg.layer.borderWidth = 0
+            self.transactionIconBg.layer.borderColor = UIColor.clear.cgColor
         case .withdrawal:
             self.categoryLabel.text = transaction.category?.rawValue.capitalized
             self.transactionIconImage.image = transaction.category?.icon
-            self.transactionIconBg.backgroundColor = UIColor(resource: .brand).withAlphaComponent(0.4)
+            self.transactionIconBg.backgroundColor = UIColor.clear
+            self.transactionIconBg.layer.borderWidth = 1
+            self.transactionIconBg.layer.borderColor = UIColor.black.cgColor
+            self.transactionIconImage.tintColor = .black
         case .undefined(let undefined):
             self.categoryLabel.text = undefined
             self.transactionIconImage.image = Transaction.Category.other.icon
+            self.transactionIconImage.tintColor = .black
+            self.transactionIconBg.backgroundColor = .clear
+            self.transactionIconBg.layer.borderWidth = 1
+            self.transactionIconBg.layer.borderColor = UIColor.black.cgColor
         }
 
         let sign = transaction.type == .withdrawal ? "-" : ""
@@ -141,14 +148,5 @@ class TransactionCell: UITableViewCell {
         
         amountLabel.textColor = UIColor.darkText
         noteLabel.text = transaction.createdAt.timeString()
-    }
-}
-
-fileprivate extension Date {
-    func timeString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.locale = Locale.current
-        return formatter.string(from: self)
     }
 }

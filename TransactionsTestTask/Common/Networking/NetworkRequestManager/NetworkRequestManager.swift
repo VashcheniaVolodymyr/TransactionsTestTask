@@ -27,14 +27,18 @@ protocol NetworkRequestServiceProtocol: AnyObject {
 }
 
 final class NetworkRequestService: NetworkRequestServiceProtocol {
-    @Injected private var synchonizeService: SynchonizeService
-    
+    // MARK: Private
     private let networkService: NetworkService
     
+    // MARK: Injection
+    @Injected private var synchonizeService: SynchonizeService
+    
+    // MARK: Init
     init(networkService: NetworkService = BaseNetworkService()) {
         self.networkService = networkService
     }
     
+    // MARK: Protocol
     func publisher<DTO>(
         request: NetworkRequest<DTO>,
         callbackQueue: DispatchQueue
@@ -78,6 +82,7 @@ final class NetworkRequestService: NetworkRequestServiceProtocol {
             )
     }
     
+    // MARK: Private methods
     private func performRequest<DTO: Responsable>(
         request: NetworkRequest<DTO>,
         callbackQueue: DispatchQueue

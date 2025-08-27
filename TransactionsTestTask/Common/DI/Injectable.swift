@@ -31,11 +31,11 @@ class Injected<T: Injectable> {
     }
 }
 
-private class DependencyContainer {
+fileprivate class DependencyContainer {
     static let instanse = DependencyContainer()
-    private lazy var lock: NSLock = NSLock()
-    
     private static var dependencies: [String: Any] = [:]
+    
+    private lazy var lock: NSLock = NSLock()
     
     func enter<T>(_ value: T) {
         lock.withLock {

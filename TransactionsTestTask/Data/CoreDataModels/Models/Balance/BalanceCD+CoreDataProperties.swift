@@ -15,9 +15,6 @@ extension BalanceCD {
     }
 
     @NSManaged public var value: Double
-
 }
 
-extension BalanceCD : Identifiable {
-
-}
+extension BalanceCD : Identifiable { }

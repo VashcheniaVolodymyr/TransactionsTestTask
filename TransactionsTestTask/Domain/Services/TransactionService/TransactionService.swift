@@ -5,25 +5,25 @@
 //  Created by Vashchenia Volodymyr on 25.08.2025.
 //
 
-enum TransactionServiceError: Error {
-    case insufficientFunds
-    case depositMustBeGreaterThanZero
-    case withdrawalMustBeGreaterThanZero
-}
-
 protocol TransactionServiceProtocol: AnyObject {
     @discardableResult
     func deposit(_ amount: Double) -> Result<Void, TransactionServiceError>
+    func withdrawal(_ amount: String, category: Transaction.Category) -> Result<Void, TransactionServiceError>
     func withdrawal(_ amount: Double, category: Transaction.Category) -> Result<Void, TransactionServiceError>
 }
 
 final class TransactionService: TransactionServiceProtocol {
+    // MARK: Injection
     @Injected private var dataManager: DataManager
     @Injected private var synchonizeService: SynchonizeService
+    @Injected private var analyticsService: AnalyticsServiceImpl
     
+    // MARK: Protocol
     @discardableResult
     func deposit(_ amount: Double) -> Result<Void, TransactionServiceError> {
-        guard amount > 0 else { return .failure(.depositMustBeGreaterThanZero)}
+        guard amount > 0 else {
+            return .failure(.depositMustBeGreaterThanZero)
+        }
         
         let transaction = Transaction(
             amount: amount,
@@ -38,7 +38,17 @@ final class TransactionService: TransactionServiceProtocol {
         self.synchonizeService.synchronize(newBalance)
         self.synchonizeService.synchronize(transaction)
         
+        analyticsService.trackEvent(convertible: transaction)
+        
         return .success(Void())
+    }
+    
+    func withdrawal(_ amount: String, category: Transaction.Category) -> Result<Void, TransactionServiceError> {
+        guard let amount = Double(amount.replacingOccurrences(of: ",", with: ".")) else {
+            return .failure(.invalidAmount)
+        }
+        
+        return withdrawal(amount, category: category)
     }
     
     func withdrawal(_ amount: Double, category: Transaction.Category) -> Result<Void, TransactionServiceError> {
@@ -62,6 +72,8 @@ final class TransactionService: TransactionServiceProtocol {
         
         self.synchonizeService.synchronize(newBalance)
         self.synchonizeService.synchronize(transaction)
+        
+        analyticsService.trackEvent(convertible: transaction)
         
         return .success(Void())
     }

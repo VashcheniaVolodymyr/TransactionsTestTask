@@ -9,11 +9,16 @@ import UIKit
 import Combine
 
 final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
+    // MARK: Injection
+    @Injected private var analyticsService: AnalyticsServiceImpl
+    
+    // MARK: Private
     private let viewModel: ViewModel
     private var cancellables: Set<AnyCancellable> = []
     
-    lazy var dataSource = CombineTableViewDataSource<String, Transaction> { table, indexPath, transaction in
+    private lazy var dataSource = CombineTableViewDataSource<String, Transaction> { table, indexPath, transaction in
         let cell = table.dequeueCell(with: TransactionCell.self, for: indexPath)
+        cell.selectionStyle = .none
         cell.configure(with: transaction)
         return cell
     }
@@ -24,9 +29,16 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkText]
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkText]
         
-        navigationItem.title = "OBRIO Wallet"
+        navigationItem.title = "OBRIO wallet"
         navigationItem.titleView?.tintColor = UIColor.darkText
     }
+    
+    private lazy var rateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17, weight: .medium)
+        label.textColor = .label
+        return label
+    }()
     
     private lazy var balanceLabel: UILabel = {
         let label = UILabel()
@@ -39,9 +51,6 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         let view = UIView()
         view.backgroundColor = UIColor(resource: .brand)
         view.layer.cornerRadius = 20
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.15
-        view.layer.shadowRadius = 8
         
         let btcLabel = UILabel()
         btcLabel.text = "Balance"
@@ -60,22 +69,23 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         
         vStack.translatesAutoresizingMaskIntoConstraints = false
         depositButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: 100),
             vStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             vStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             depositButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            depositButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            view.heightAnchor.constraint(equalToConstant: 100)
+            depositButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-                
+        
         return view
     }()
     
     private lazy var depositButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "plus.app.fill"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = UIColor(resource: .brand)
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.tintColor = UIColor(resource: .brand)
+        button.backgroundColor = .white
         button.layer.cornerRadius = 12
         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -83,21 +93,62 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         return button
     }()
     
-    private lazy var headerStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [balanceCard, addTransactionButton])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        return stack
+    private lazy var tableHeaderContainer: UIView = {
+        let container = UIView()
+        
+        container.addSubview(rateLabel)
+        rateLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            rateLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
+            rateLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16)
+        ])
+        
+
+        container.addSubview(balanceCard)
+        balanceCard.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            balanceCard.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 16),
+            balanceCard.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            balanceCard.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            balanceCard.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        container.addSubview(addTransactionButton)
+        addTransactionButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            addTransactionButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            addTransactionButton.topAnchor.constraint(equalTo: balanceCard.bottomAnchor, constant: 16),
+            addTransactionButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        container.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: UIScreen.main.bounds.width,
+            height: 16 + 20 + 16 + 100 + 16 + 50
+        )
+        
+        return container
     }()
     
     private lazy var addTransactionButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.title = "Add transaction"
+        configuration.image = UIImage(systemName: "bag.badge.plus")
+        configuration.imagePadding = 8
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        configuration.baseForegroundColor = .black
+        configuration.background.backgroundColor = .clear
+        configuration.background.strokeColor = .black
+        configuration.background.strokeWidth = 1
+        configuration.cornerStyle = .large
+        
         let button = UIButton(type: .system)
-        button.setTitle("Add transaction", for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
-        button.backgroundColor = .systemGray6
-        button.layer.cornerRadius = 12
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.configuration = configuration
         button.addTarget(self, action: #selector(didTapAddTransaction), for: .touchUpInside)
+        
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         return button
     }()
     
@@ -112,42 +163,36 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         return table
     }()
     
-    private func setupLayout() {
-        let stack = UIStackView(arrangedSubviews: [headerStack, tableView])
-        stack.axis = .vertical
-        stack.spacing = 16
-        view.addSubview(stack)
-        
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
+    // MARK: Actions
     @objc private func didTapDeposit() {
-        let alert = UIAlertController(title: "Deposit BTC", message: "Enter amount", preferredStyle: .alert)
-        alert.addTextField { tf in tf.keyboardType = .decimalPad }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            if let text = alert.textFields?.first?.text, let amount = Double(text) {
-                self?.viewModel.deposit(amount: amount)
-            }
-        })
-        present(alert, animated: true)
+        let popup = DepositPopup()
+        popup.onConfirm = { [weak self] amount in
+            self?.viewModel.deposit(amount: amount)
+        }
+        popup.onCancel = {
+            print("Deposit cancelled")
+        }
+        popup.show(in: self.view)
+        
+        analyticsService.trackEvent(name: .tapToDeposit)
     }
     
     @objc private func didTapAddTransaction() {
         viewModel.didTapAddTransaction()
+        analyticsService.trackEvent(name: .tapToAddTransaction)
     }
     
     // MARK: - Init
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
+        viewModel.rate
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] rate in
+                self?.rateLabel.text = "1₿ = \(rate) USD"
+            }
+            .store(in: &cancellables)
         
         viewModel.balance
             .receive(on: DispatchQueue.main)
@@ -163,12 +208,11 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
                 self.dataSource.pushSections(sections, to: self.tableView)
             }).store(in: &cancellables)
         
-        viewModel.rate
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] rate in
-                self?.navigationItem.rightBarButtonItem?.title = "1 BTC = $\(rate)"
+        dataSource.onLoadNextPage = {
+            DispatchQueue.global(qos: .utility).async { [weak self] in
+                self?.viewModel.loadNextPageOfHistory()
             }
-            .store(in: &cancellables)
+        }
     }
     
     @available(*, unavailable)
@@ -183,6 +227,17 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         setupNavBar()
         view.backgroundColor = .white
         
-        setupLayout()
+
+        balanceCard.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 100)
+        tableView.tableHeaderView = tableHeaderContainer
+        tableView.register(EmptyTableViewCell.self, forCellReuseIdentifier: EmptyTableViewCell.identifier)
+        
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }

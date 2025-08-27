@@ -8,25 +8,11 @@
 import UIKit
 
 final class Navigation: Injectable {
+    // MARK: Private
     private lazy var window: UIWindow = UIWindow()
     private lazy var currentNavigationController: UINavigationController = .init()
     
-    init() { }
-    
-    convenience init(
-        window: UIWindow = UIWindow(),
-        currentNavigationController: BaseNavigationController = .init()
-    ) {
-        self.init()
-        self.window = window
-        self.currentNavigationController = currentNavigationController
-    }
-    
-    func start(window: UIWindow) {
-        self.window = window
-        self.navigate(builder: Scenes.mainScene())
-    }
-    
+    // MARK: Public properties
     lazy var topViewController: UIViewController? = {
         currentNavigationController.topViewController
     }()
@@ -38,6 +24,24 @@ final class Navigation: Injectable {
     lazy var currentController: UIViewController? = {
         currentNavigationController.viewControllers.last
     }()
+    
+    // MARK: Init
+    init() { }
+    
+    convenience init(
+        window: UIWindow = UIWindow(),
+        currentNavigationController: BaseNavigationController = .init()
+    ) {
+        self.init()
+        self.window = window
+        self.currentNavigationController = currentNavigationController
+    }
+    
+    // MARK: Public methods
+    func start(window: UIWindow) {
+        self.window = window
+        self.navigate(builder: Scenes.mainScene())
+    }
     
     func navigate<SceneBuilder>(builder: SceneBuilder, completion: VoidCallBack? = nil)
     where SceneBuilder: SceneBuilderProtocol, SceneBuilder.Scene: UIViewController {
@@ -61,7 +65,18 @@ final class Navigation: Injectable {
         }
     }
     
-
+    func popViewController(animated: Bool = true, finishedAction: VoidCallBack? = nil) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let poped = self.currentNavigationController.popViewController(animated: animated)
+            
+            if poped.notNil {
+                finishedAction?()
+            }
+        }
+    }
+    
+    // MARK: Private methods
     private func root(
         navigation: BaseNavigationController,
         animated: Bool = false,

@@ -44,7 +44,7 @@ struct Transaction: Hashable, CoreDataConvertible {
 }
 
 extension Transaction {
-    enum Category: String {
+    enum Category: String, CaseIterable {
         case groceries, taxi,
              electronics, restaurant,
              other
@@ -112,6 +112,35 @@ extension Transaction {
         
         func hash(into hasher: inout Hasher) {
             hasher.combine(rawValue)
+        }
+    }
+}
+
+
+extension Transaction: AnalyticsConvertible {
+    func event() -> AnalyticsEvent {
+        switch type {
+        case .deposit:
+            return .init(
+                name: .deposit,
+                parameters: ["amount": String(amount)]
+            )
+        case .withdrawal:
+            return .init(
+                name: .widrawal,
+                parameters: [
+                    "amount": String(amount),
+                    "category": category?.rawValue
+                ].compactMapValues { $0 }
+            )
+        case .undefined(let transaction):
+            return .init(
+                name: .custom(transaction),
+                parameters: [
+                    "amount": String(amount),
+                    "category": category?.rawValue
+                ].compactMapValues { $0 }
+            )
         }
     }
 }

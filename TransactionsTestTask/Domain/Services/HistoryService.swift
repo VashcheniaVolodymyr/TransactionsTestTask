@@ -5,26 +5,31 @@
 //  Created by Vashchenia Volodymyr on 25.08.2025.
 //
 
+import Combine
 import CoreData
 
 protocol HistoryServiceProtocol: AnyObject {
-    func grouptedHistory(limit: Int, page: Int) -> [TableSection<String, Transaction>]
+    func loadHistory(limit: Int, page: Int) -> [Transaction]
+    var historyDidChange: AnyPublisher<Void, Never> { get }
 }
 
 final class HistoryService: HistoryServiceProtocol {
+    // MARK: Protocol
+    lazy var historyDidChange: AnyPublisher<Void, Never> = {
+        return CDPublisher(request: TransactionCD.fetchRequest(), context: CoreDataStack.viewContext)
+            .dropFirst(2)
+            .map { _ in () }
+            .catch { _ in Empty<Void, Never>() }
+            .share()
+            .eraseToAnyPublisher()
+    }()
     
-    func grouptedHistory(limit: Int, page: Int) -> [TableSection<String, Transaction>] {
-        let items = loadHistory(limit: limit, page: page)
-        
-        return [.init(id: Date.now.dateString(), items: items)]
-    }
-    
-    private func loadHistory(limit: Int, page: Int) -> [Transaction] {
+    func loadHistory(limit: Int, page: Int) -> [Transaction] {
         let request: NSFetchRequest<TransactionCD> = TransactionCD.fetchRequest()
 
         request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         request.fetchLimit = limit
-        request.fetchOffset = page <= 1 ? 0 : page * limit
+        request.fetchOffset = max(0, (page - 1) * limit)
 
         do {
             let results = try CoreDataStack.viewContext.fetch(request)
@@ -34,14 +39,5 @@ final class HistoryService: HistoryServiceProtocol {
         } catch {
             return []
         }
-    }
-}
-
-fileprivate extension Date {
-    func dateString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd yyyy"
-        formatter.locale = Locale.current
-        return formatter.string(from: self)
     }
 }

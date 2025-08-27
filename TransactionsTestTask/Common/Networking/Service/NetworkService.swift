@@ -20,12 +20,15 @@ public extension NetworkService {
 }
 
 public class BaseNetworkService: NetworkService {
+    // MARK: Private
     private let session: URLSession
 
+    // MARK: Init
     public init(configuration: URLSessionConfiguration = .default) {
         self.session = URLSession(configuration: configuration)
     }
 
+    // MARK: Protocol
     public func dataTaskPublisher(
         _ request: APIRequest,
         callbackQueue: DispatchQueue

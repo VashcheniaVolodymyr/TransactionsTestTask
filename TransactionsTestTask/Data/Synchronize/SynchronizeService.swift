@@ -10,6 +10,7 @@ import Combine
 import CoreData
 
 final class SynchonizeService: Injectable {
+    // MARK: Private
     private let synchronizeQueue: DispatchQueue
 
     private lazy var allModels: [NSManagedObject.Type] = [
@@ -18,7 +19,7 @@ final class SynchonizeService: Injectable {
         TransactionCD.self
     ]
 
-    // MARK: Initialization
+    // MARK: Init
     init() {
         self.synchronizeQueue = .init(label: String(describing: Self.self) + ".synchronizeQueue")
     }
@@ -135,8 +136,6 @@ final class SynchonizeService: Injectable {
             return []
         }
     }
-    
-    func removeStoredData() {}
     
     // MARK: Private methods
     private func synchronize<SYNC: Synchronizable>(data: SYNC) {

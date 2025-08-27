@@ -17,6 +17,4 @@ extension ExchangeRateCD {
     @NSManaged public var data: Data?
 }
 
-extension ExchangeRateCD: Identifiable {
-    
-}
+extension ExchangeRateCD: Identifiable { }

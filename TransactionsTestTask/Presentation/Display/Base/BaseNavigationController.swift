@@ -8,6 +8,7 @@
 import UIKit
 
 class BaseNavigationController: UINavigationController, UIGestureRecognizerDelegate {
+    // MARK: Lifecycle
     open override func viewDidLoad() {
         super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self

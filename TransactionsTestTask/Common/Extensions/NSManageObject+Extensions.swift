@@ -8,26 +8,6 @@
 import CoreData
 import Foundation
 
-struct CoreDataStack {
-    static var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "TransactionsTestTask")
-        container.loadPersistentStores { _, error in
-            if let error = error {
-                fatalError("❌ Failed to load store: \(error)")
-            }
-        }
-        return container
-    }()
-
-    static var viewContext: NSManagedObjectContext {
-        persistentContainer.viewContext
-    }
-
-    static func backgroundContext() -> NSManagedObjectContext {
-        persistentContainer.newBackgroundContext()
-    }
-}
-
 extension NSManagedObject {
     @discardableResult
     func save(context: NSManagedObjectContext = CoreDataStack.viewContext) -> Result<Void, AppError> {

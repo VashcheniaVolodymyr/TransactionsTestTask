@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum APIBuildRequestError: Error, APIClientErrorRepresentable {
+public enum APIBuildRequestError: Error, ClientPresentableError {
     case invalidURL
     
     public var clientMessage: String {
@@ -18,7 +18,7 @@ public enum APIBuildRequestError: Error, APIClientErrorRepresentable {
     }
 }
 
-public enum APIResponseError: Error, APIClientErrorRepresentable {
+public enum APIResponseError: Error, ClientPresentableError {
     case noResponse
     case clientError(statusCode: Int, data: Data)
     case decodingError(Error)
@@ -34,7 +34,7 @@ public enum APIError: Error {
     case undefined(request: URLRequest?, error: any Error)
 }
 
-extension APIError: APIClientErrorRepresentable {
+extension APIError: ClientPresentableError {
     public var clientMessage: String {
         switch self {
         case .buildRequest(let aPIBuildRequestError):

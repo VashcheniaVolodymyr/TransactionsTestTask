@@ -8,54 +8,75 @@
 import UIKit
 import Combine
 
-// MARK: - Section model
-struct TableSection<SectionID: Hashable, Item> {
+struct TableSection<SectionID: Hashable, Item: Hashable>: Hashable {
     let id: SectionID
     var items: [Item]
 }
 
-// MARK: - DataSource
-class CombineTableViewDataSource<SectionID: Hashable, Element>: NSObject, UITableViewDataSource {
+class CombineTableViewDataSource<SectionID: Hashable, Element: Hashable>: NSObject, UITableViewDataSource, UITableViewDelegate {
     typealias CellBuilder = (UITableView, IndexPath, Element) -> UITableViewCell
     
     private let build: CellBuilder
     private var sections: [TableSection<SectionID, Element>] = []
+    
+    var onLoadNextPage: (() -> Void)?
+    
+    private var isLoadingNextPage = false
     
     init(builder: @escaping CellBuilder) {
         build = builder
         super.init()
     }
     
-    // MARK: - Push elements (старый API)
-    func pushElements(_ elements: [Element], to tableView: UITableView) {
-        tableView.dataSource = self
-        self.sections = [TableSection(id: "default" as! SectionID, items: elements)]
-        tableView.reloadData()
-    }
-    
-    // MARK: - Push sections (новый API)
     func pushSections(_ sections: [TableSection<SectionID, Element>], to tableView: UITableView) {
         tableView.dataSource = self
+        tableView.delegate = self
         self.sections = sections
         tableView.reloadData()
+        isLoadingNextPage = false
     }
     
     // MARK: - UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
+        return sections.isEmpty ? 1 : sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sections[section].items.count
+        if sections.isEmpty {
+            return 1
+        } else {
+            return sections[section].items.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = sections[indexPath.section].items[indexPath.row]
-        return build(tableView, indexPath, item)
+        if sections.isEmpty {
+            let cell = tableView.dequeueCell(with: EmptyTableViewCell.self, for: indexPath)
+            cell.configure(title: AppConstants.History.noTransactions, message: AppConstants.History.your_history_will_appear_here)
+            return cell
+        }
+        
+        let items = sections[indexPath.section].items
+        return build(tableView, indexPath, items[indexPath.row])
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if sections.isEmpty {
+            return nil
+        } else {
+            return String(describing: sections[section].id)
+        }
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        String(describing: sections[section].id)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+        
+        if offsetY > contentHeight - frameHeight - 100, !isLoadingNextPage {
+            isLoadingNextPage = true
+            onLoadNextPage?()
+        }
     }
 }
 
