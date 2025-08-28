@@ -150,12 +150,4 @@ final class SynchonizeService: Injectable {
             break
         }
     }
-    
-    private func synchronize<SYNC: Synchronizable>(data: SYNC) where SYNC.Synchronize: Atomic<Any> {
-        guard let synchronized = data as? SYNC.Synchronize else {
-            return
-        }
-        
-        dataManager[keyPath: data.syncKeyPath].send(synchronized)
-    }
 }
