@@ -86,7 +86,6 @@
 		25E84E7D2E5F2EF000794DF7 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E7C2E5F2EE700794DF7 /* UIViewController+Extensions.swift */; };
 		25E84E7F2E5F352E00794DF7 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E7E2E5F352900794DF7 /* Date+Extensions.swift */; };
 		25E84E812E5F386900794DF7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E802E5F386200794DF7 /* CoreDataStack.swift */; };
-		25E84E832E5F40A200794DF7 /* BitcoinRateServiceUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E84E822E5F408B00794DF7 /* BitcoinRateServiceUnitTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,7 +189,6 @@
 		25E84E7C2E5F2EE700794DF7 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		25E84E7E2E5F352900794DF7 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		25E84E802E5F386200794DF7 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		25E84E822E5F408B00794DF7 /* BitcoinRateServiceUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinRateServiceUnitTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,7 +261,7 @@
 		1CA3B66E2D22B0F600176711 /* TransactionsTestTaskTests */ = {
 			isa = PBXGroup;
 			children = (
-				25E84E842E5F40A500794DF7 /* Unit */,
+				1CA3B66F2D22B0F600176711 /* TransactionsTestTaskTests.swift */,
 			);
 			path = TransactionsTestTaskTests;
 			sourceTree = "<group>";
@@ -715,15 +713,6 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		25E84E842E5F40A500794DF7 /* Unit */ = {
-			isa = PBXGroup;
-			children = (
-				25E84E822E5F408B00794DF7 /* BitcoinRateServiceUnitTests.swift */,
-				1CA3B66F2D22B0F600176711 /* TransactionsTestTaskTests.swift */,
-			);
-			path = Unit;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -937,7 +926,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25E84E832E5F40A200794DF7 /* BitcoinRateServiceUnitTests.swift in Sources */,
 				1CA3B6702D22B0F600176711 /* TransactionsTestTaskTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

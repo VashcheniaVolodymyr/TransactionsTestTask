@@ -20,20 +20,23 @@ protocol MainSceneVMP: AnyObject {
 }
 
 final class MainSceneViewModel: MainSceneVMP {
+    // MARK: Public
     var rate: CurrentValueSubject<Double, Never> = .init(0)
     var balance: CurrentValueSubject<Double, Never> = .init(0)
     var historySections: CurrentValueSubject<[TableSection<String, Transaction>], Never> = .init([])
+    
+    // MARK: Private
     private var cancellables = Set<AnyCancellable>()
     private var currentPage: Int = 1
+    private let transactionsService: TransactionServiceProtocol
+    private let historyService: HistoryServiceProtocol
     
     // MARK: Injection
     @Injected private var bitcoinRateService: BitcoinRateService
     @Injected private var dataManager: DataManager
     @Injected private var navigation: Navigation
     
-    private let transactionsService: TransactionServiceProtocol
-    private let historyService: HistoryServiceProtocol
-    
+    // MARK: Init
     init(
         transactionService: TransactionServiceProtocol = TransactionService(),
         historyService: HistoryServiceProtocol = HistoryService()
@@ -47,6 +50,7 @@ final class MainSceneViewModel: MainSceneVMP {
         cancellables.removeAll()
     }
     
+    // MARK: Protocol
     func viewDidLoad() {
         bitcoinRateService.syncRate()
         let transactions = historyService.loadHistory(limit: 20, page: currentPage)
@@ -68,11 +72,6 @@ final class MainSceneViewModel: MainSceneVMP {
             self.currentPage += 1
             
             let loadedTransactions = self.historyService.loadHistory(limit: 20, page: currentPage)
-            
-            print("Loaded")
-            loadedTransactions.forEach { transaction in
-                print(transaction.uuid.uuidString)
-            }
             
             if loadedTransactions.isEmpty.NOT {
                 let currentTransactions: [Transaction] = self.historySections.value.reduce(into: []) { partialResult, section in

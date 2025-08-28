@@ -98,14 +98,15 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         
         container.addSubview(rateLabel)
         rateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             rateLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
             rateLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16)
         ])
         
-
         container.addSubview(balanceCard)
         balanceCard.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             balanceCard.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 16),
             balanceCard.leadingAnchor.constraint(equalTo: container.leadingAnchor),
@@ -115,6 +116,7 @@ final class MainScene<ViewModel: MainSceneVMP>: BaseViewController {
         
         container.addSubview(addTransactionButton)
         addTransactionButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             addTransactionButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             addTransactionButton.topAnchor.constraint(equalTo: balanceCard.bottomAnchor, constant: 16),
