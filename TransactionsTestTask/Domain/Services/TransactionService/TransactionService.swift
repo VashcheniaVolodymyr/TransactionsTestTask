@@ -32,15 +32,48 @@ final class TransactionService: TransactionServiceProtocol {
             type: .deposit
         )
         
-        let updatedBalace = dataManager.balance.value.value + amount
-        let newBalance = Balance(value: updatedBalace)
+        let newBalance = dataManager.balance.value.modify { balance in
+            Balance(value: balance.value + amount)
+        }
         
-        self.synchonizeService.synchronize(newBalance)
-        self.synchonizeService.synchronize(transaction)
-        
+        synchonizeService.synchronize(newBalance)
+        synchonizeService.synchronize(transaction)
         analyticsService.trackEvent(convertible: transaction)
         
-        return .success(Void())
+        return .success(())
+    }
+    
+    @discardableResult
+    func withdrawal(_ amount: Double, category: Transaction.Category) -> Result<Void, TransactionServiceError> {
+        guard amount > 0 else {
+            return .failure(.withdrawalMustBeGreaterThanZero)
+        }
+        
+        var transactionToSync: Transaction?
+        var result: Result<Void, TransactionServiceError> = .failure(.insufficientFunds)
+        
+        let newBalance = dataManager.balance.value.modify { balance in
+            if balance.value >= amount {
+                transactionToSync = Transaction(
+                    amount: amount,
+                    category: category,
+                    createdAt: .now,
+                    type: .withdrawal
+                )
+                result = .success(())
+                return Balance(value: balance.value - amount)
+            } else {
+                return balance
+            }
+        }
+        
+        if let transaction = transactionToSync {
+            synchonizeService.synchronize(newBalance)
+            synchonizeService.synchronize(transaction)
+            analyticsService.trackEvent(convertible: transaction)
+        }
+        
+        return result
     }
     
     func withdrawal(_ amount: String, category: Transaction.Category) -> Result<Void, TransactionServiceError> {
@@ -49,32 +82,5 @@ final class TransactionService: TransactionServiceProtocol {
         }
         
         return withdrawal(amount, category: category)
-    }
-    
-    func withdrawal(_ amount: Double, category: Transaction.Category) -> Result<Void, TransactionServiceError> {
-        guard amount > 0 else {
-            return .failure(.withdrawalMustBeGreaterThanZero)
-        }
-        
-        guard (dataManager.balance.value.value - amount) >= 0 else {
-            return .failure(.insufficientFunds)
-        }
-        
-        let transaction = Transaction(
-            amount: amount,
-            category: category,
-            createdAt: .now,
-            type: .withdrawal
-        )
-        
-        let updatedBalace = dataManager.balance.value.value - amount
-        let newBalance = Balance(value: updatedBalace)
-        
-        self.synchonizeService.synchronize(newBalance)
-        self.synchonizeService.synchronize(transaction)
-        
-        analyticsService.trackEvent(convertible: transaction)
-        
-        return .success(Void())
     }
 }

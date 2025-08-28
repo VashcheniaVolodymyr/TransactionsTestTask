@@ -7,6 +7,8 @@
 
 import Foundation
 
+protocol AtomicData { }
+
 public enum AtomicLockError: Error {
     case isLocked
 }

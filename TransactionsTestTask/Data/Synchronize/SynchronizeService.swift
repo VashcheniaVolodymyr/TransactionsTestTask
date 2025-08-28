@@ -139,9 +139,23 @@ final class SynchonizeService: Injectable {
     
     // MARK: Private methods
     private func synchronize<SYNC: Synchronizable>(data: SYNC) {
+        switch data {
+        case let atomicData as AtomicData:
+            if let value = Atomic(value: data) as? SYNC.Synchronize {
+                dataManager[keyPath: data.syncKeyPath].send(value)
+            }
+        case let synchronizable as SYNC.Synchronize:
+            dataManager[keyPath: data.syncKeyPath].send(synchronizable)
+        default:
+            break
+        }
+    }
+    
+    private func synchronize<SYNC: Synchronizable>(data: SYNC) where SYNC.Synchronize: Atomic<Any> {
         guard let synchronized = data as? SYNC.Synchronize else {
             return
         }
+        
         dataManager[keyPath: data.syncKeyPath].send(synchronized)
     }
 }

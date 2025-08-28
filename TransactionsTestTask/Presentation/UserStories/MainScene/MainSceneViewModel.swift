@@ -89,7 +89,9 @@ final class MainSceneViewModel: MainSceneVMP {
     // MARK: Private methods
     private func bind() {
         dataManager.balance
-            .map { $0.value }
+            .map { $0.with { balance in
+                return balance.value
+            }}
             .removeDuplicates()
             .assign(to: \.value, on: balance, ownership: .weak)
             .store(in: &cancellables)
